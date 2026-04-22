@@ -29,7 +29,7 @@ try:
 
 
    # Tao dong output chuan
-   line = f'[{now}] CPU: {cpu_avg:.1f}% | RAM: {ram_used_mb}/{ram_total_mb} M>
+   line = f'[{now}] CPU: {cpu_avg:.1f}% | RAM: {ram_used_mb}/{ram_total_mb} M'
 
 print(line)
    if status != 'NORMAL':
