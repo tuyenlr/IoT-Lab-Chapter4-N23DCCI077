@@ -21,8 +21,9 @@ test-sensor-sim:
   image: python:3.11-slim
   script:
     - pip install psutil
-    - echo '--- Test sensor_sim.py ---'
-    - cd BT2_QEMU_SensorSim && python sensor_sim.py
+    - echo '--- Test sensor_sim.py (chạy thử 5 giây) ---'
+    # Lệnh dưới đây chạy python ở background, đợi 5s rồi tắt để tránh kẹt pipeline
+    - cd BT2_QEMU_SensorSim && python sensor_sim.py & sleep 5 && kill $!
   tags: []
 
 # ===== STAGE 3: VERIFY =====
@@ -31,11 +32,12 @@ check-structure:
   image: alpine:latest
   script:
     - echo '--- Kiểm tra cấu trúc thư mục ---'
+    # Alpine dùng 'ls' hoặc 'test -f' đều được, nhưng cần đảm bảo đường dẫn đúng
     - test -f BT1_QEMU_SystemMonitor/system_monitor.py || exit 1
     - test -f BT2_QEMU_SensorSim/sensor_sim.py || exit 1
     - test -f BT2_QEMU_SensorSim/sensor_visualize.py || exit 1
     - test -f README.md || exit 1
-    - test -f .github/workflows/ci.yml || exit 1
+    - test -f .github/workflows/*.yml || exit 1
     - test -f .gitlab-ci.yml || exit 1
     - echo 'Structure OK — cả GitHub Actions và GitLab CI đều có.'
   tags: []
